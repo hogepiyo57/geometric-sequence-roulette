@@ -1,0 +1,599 @@
+:root {
+  color-scheme: dark;
+  --gold: #d7b66b;
+  --gold-light: #f3da9a;
+  --red: #9f1024;
+  --red-bright: #d4213a;
+  --black: #08090b;
+  --ink: #15110f;
+  --felt: #062b22;
+  --felt-light: #0d4a3b;
+  --cream: #f8edd1;
+  --muted: #b9aa88;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100svh;
+  margin: 0;
+  font-family: "Times New Roman", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  color: var(--cream);
+  background:
+    radial-gradient(circle at 50% 20%, rgba(215, 182, 107, 0.18), transparent 32rem),
+    linear-gradient(135deg, #050506 0%, #17100f 45%, #040404 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.casino-shell {
+  width: min(1180px, calc(100% - 32px));
+  min-height: 100vh;
+  min-height: 100svh;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+  padding: 32px 0;
+}
+
+.dealer-panel,
+.game-table {
+  border: 1px solid rgba(215, 182, 107, 0.42);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5), inset 0 0 34px rgba(215, 182, 107, 0.06);
+}
+
+.dealer-panel {
+  background: linear-gradient(180deg, rgba(48, 11, 17, 0.9), rgba(9, 9, 10, 0.94));
+  padding: 22px;
+  border-radius: 8px;
+}
+
+.dealer-frame {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(243, 218, 154, 0.55);
+  background: #0b0b0c;
+  transform-origin: 50% 82%;
+  transition: box-shadow 0.28s ease, filter 0.28s ease;
+}
+
+.dealer-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.16s ease, transform 0.28s ease;
+}
+
+.dealer-frame.is-choice img {
+  animation: dealerNod 0.55s ease;
+}
+
+.dealer-frame.is-warning {
+  box-shadow: 0 0 0 3px rgba(212, 33, 58, 0.34), 0 20px 44px rgba(0, 0, 0, 0.42);
+}
+
+.dealer-frame.is-warning img {
+  animation: dealerWarning 0.5s ease;
+}
+
+.dealer-frame.is-spinning {
+  filter: brightness(1.08);
+  box-shadow: 0 0 32px rgba(243, 218, 154, 0.34), 0 20px 44px rgba(0, 0, 0, 0.42);
+}
+
+.dealer-frame.is-spinning img {
+  animation: dealerCall 0.68s ease-in-out infinite;
+}
+
+.dealer-frame.is-win {
+  box-shadow: 0 0 36px rgba(243, 218, 154, 0.46), 0 20px 44px rgba(0, 0, 0, 0.42);
+}
+
+.dealer-frame.is-win img {
+  animation: dealerCelebrate 0.78s ease;
+}
+
+.dealer-frame.is-lose img {
+  animation: dealerBow 0.7s ease;
+}
+
+.dealer-message {
+  position: relative;
+  min-height: 106px;
+  margin-top: 18px;
+  padding: 18px 20px;
+  border-radius: 8px;
+  color: #241306;
+  background: linear-gradient(180deg, #fff4d6, #d7b66b);
+  line-height: 1.7;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.32);
+}
+
+.dealer-message::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 34px;
+  width: 20px;
+  height: 20px;
+  background: #fff4d6;
+  transform: rotate(45deg);
+}
+
+.game-table {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  padding: clamp(22px, 4vw, 42px);
+  background:
+    linear-gradient(90deg, rgba(215, 182, 107, 0.12) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 44%),
+    radial-gradient(circle at center, var(--felt-light), var(--felt) 58%, #041812);
+  background-size: 40px 40px, auto, auto;
+}
+
+.game-table::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(243, 218, 154, 0.4);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.table-header {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px 20px;
+  align-items: end;
+}
+
+.eyebrow {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--gold-light);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 0.76rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4.5vw, 4.8rem);
+  line-height: 0.95;
+  color: #fff6da;
+  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.65);
+}
+
+.balance-card {
+  min-width: 180px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  text-align: right;
+  color: var(--gold-light);
+  background: rgba(4, 5, 6, 0.76);
+  border: 1px solid rgba(215, 182, 107, 0.38);
+}
+
+.balance-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.balance-card strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 1.7rem;
+}
+
+.roulette-stage {
+  position: relative;
+  z-index: 1;
+  width: min(390px, 76vw);
+  aspect-ratio: 1;
+  margin: clamp(24px, 5vw, 48px) auto;
+}
+
+.pointer {
+  position: absolute;
+  z-index: 3;
+  top: -5px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-top: 34px solid var(--gold-light);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.55));
+}
+
+.roulette-wheel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 10px solid #20150d;
+  background:
+    radial-gradient(circle, transparent 0 27%, #1d120e 28% 31%, transparent 32%),
+    repeating-conic-gradient(from 0deg, var(--red) 0deg 22.5deg, #09090a 22.5deg 45deg);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 7px rgba(215, 182, 107, 0.72),
+    inset 0 0 0 20px rgba(255, 255, 255, 0.06);
+  transition: transform 0.45s ease-out, filter 0.3s ease;
+}
+
+.roulette-wheel::before {
+  content: "";
+  position: absolute;
+  inset: 32px;
+  border-radius: 50%;
+  border: 2px dashed rgba(248, 237, 209, 0.5);
+}
+
+.roulette-wheel.spinning {
+  animation: spinRoulette 5s cubic-bezier(0.15, 0.85, 0.22, 1) forwards;
+  filter: brightness(1.12);
+}
+
+.wheel-center {
+  position: relative;
+  z-index: 2;
+  width: 33%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #221305;
+  background: radial-gradient(circle at 35% 28%, #fff1c3, var(--gold) 62%, #8b6428);
+  border: 4px solid #fff0b8;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.58);
+}
+
+.wheel-center span {
+  font-family: Arial, "Hiragino Sans", sans-serif;
+  font-size: clamp(0.8rem, 2.6vw, 1.25rem);
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.bet-panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 18px;
+}
+
+.choice-group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.choice,
+.spin-button,
+.reset-button {
+  min-height: 54px;
+  border-radius: 8px;
+  border: 1px solid rgba(243, 218, 154, 0.54);
+  color: #fff6da;
+  font-weight: 800;
+  letter-spacing: 1px;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.choice:hover,
+.spin-button:hover,
+.reset-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
+}
+
+.choice[aria-pressed="true"] {
+  border-color: var(--gold-light);
+  box-shadow: 0 0 0 3px rgba(215, 182, 107, 0.26), 0 12px 26px rgba(0, 0, 0, 0.35);
+}
+
+.red-choice {
+  background: linear-gradient(180deg, var(--red-bright), #680714);
+}
+
+.black-choice {
+  background: linear-gradient(180deg, #2a2b31, #030304);
+}
+
+.bet-input {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.bet-input input {
+  width: 100%;
+  min-height: 58px;
+  border-radius: 8px;
+  border: 1px solid rgba(215, 182, 107, 0.46);
+  padding: 0 18px;
+  color: var(--cream);
+  background: rgba(4, 5, 6, 0.76);
+  outline: none;
+}
+
+.bet-input input:focus {
+  border-color: var(--gold-light);
+  box-shadow: 0 0 0 3px rgba(215, 182, 107, 0.18);
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+}
+
+.spin-button {
+  background: linear-gradient(180deg, #f1d78e, #a77a29);
+  color: #1c1205;
+}
+
+.reset-button {
+  padding: 0 18px;
+  background: rgba(4, 5, 6, 0.72);
+}
+
+@keyframes spinRoulette {
+  0% {
+    transform: rotate(var(--spin-start, 0deg));
+  }
+  100% {
+    transform: rotate(var(--spin-deg, 2160deg));
+  }
+}
+
+@keyframes dealerNod {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  45% {
+    transform: translateY(7px) scale(1.01);
+  }
+}
+
+@keyframes dealerWarning {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  20% {
+    transform: translateX(-8px) rotate(-2deg);
+  }
+  45% {
+    transform: translateX(7px) rotate(2deg);
+  }
+  70% {
+    transform: translateX(-4px) rotate(-1deg);
+  }
+}
+
+@keyframes dealerCall {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg) scale(1.01);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg) scale(1.04);
+  }
+}
+
+@keyframes dealerCelebrate {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  42% {
+    transform: translateY(-14px) scale(1.06);
+  }
+  70% {
+    transform: translateY(3px) scale(1.02);
+  }
+}
+
+@keyframes dealerBow {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+@media (orientation: landscape) and (min-width: 861px) and (max-width: 1180px) and (max-height: 850px) {
+  body {
+    overflow: hidden;
+  }
+
+  .casino-shell {
+    width: min(100% - 24px, 1080px);
+    grid-template-columns: minmax(230px, 300px) minmax(0, 1fr);
+    gap: 18px;
+    padding: 14px 0;
+  }
+
+  .dealer-panel {
+    align-self: stretch;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    padding: 16px;
+  }
+
+  .dealer-frame {
+    align-self: center;
+    max-height: min(48vh, 292px);
+  }
+
+  .dealer-message {
+    min-height: 92px;
+    margin-top: 14px;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .game-table {
+    align-self: stretch;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 22px 24px;
+  }
+
+  .game-table::before {
+    inset: 10px;
+  }
+
+  .table-header {
+    gap: 6px 16px;
+  }
+
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .balance-card {
+    min-width: 158px;
+    padding: 10px 12px;
+  }
+
+  .balance-card strong {
+    font-size: 1.45rem;
+  }
+
+  .roulette-stage {
+    width: min(310px, 36vw, 42vh);
+    align-self: center;
+    margin: 14px auto 16px;
+  }
+
+  .pointer {
+    border-left-width: 13px;
+    border-right-width: 13px;
+    border-top-width: 28px;
+  }
+
+  .roulette-wheel {
+    border-width: 8px;
+  }
+
+  .roulette-wheel::before {
+    inset: 26px;
+  }
+
+  .bet-panel {
+    grid-template-columns: 1.1fr 1fr;
+    gap: 12px 14px;
+    align-items: end;
+  }
+
+  .choice-group {
+    gap: 10px;
+  }
+
+  .choice,
+  .spin-button,
+  .reset-button {
+    min-height: 50px;
+  }
+
+  .bet-input {
+    gap: 6px;
+  }
+
+  .bet-input input {
+    min-height: 50px;
+  }
+
+  .actions {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 860px) {
+  .casino-shell {
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding: 20px 0;
+  }
+
+  .dealer-panel {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .dealer-message {
+    margin-top: 0;
+  }
+
+  .dealer-message::before {
+    top: 42px;
+    left: -9px;
+  }
+}
+
+@media (max-width: 560px) {
+  .casino-shell {
+    width: min(100% - 20px, 1180px);
+  }
+
+  .dealer-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .table-header,
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  .balance-card {
+    text-align: left;
+  }
+
+  .choice-group {
+    gap: 10px;
+  }
+}

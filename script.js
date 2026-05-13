@@ -1,4 +1,4 @@
-const STARTING_BALANCE = 100000;
+const STARTING_BALANCE = 300000;
 const SPIN_DURATION_MS = 5000;
 
 const balanceEl = document.getElementById("balance");

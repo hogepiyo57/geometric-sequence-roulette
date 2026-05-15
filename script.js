@@ -118,7 +118,7 @@ function finishGameIfNeeded() {
     setControlsDisabled(true);
     resetButtonEl.disabled = false;
     setDealerState("lose", "is-lose");
-    setDealerMessage("所持金がなくなりました。再スタートで10万円からもう一度始められます。");
+    setDealerMessage("所持金がなくなりました。再スタートで30万円からもう一度始められます。");
   }
 }
 
@@ -222,7 +222,7 @@ resetButtonEl.addEventListener("click", () => {
   updateBalance();
   setControlsDisabled(false);
   setDealerState("idle");
-  setDealerMessage("10万円をご用意しました。赤か黒を選び、100円単位でベットしてください。");
+  setDealerMessage("30万円をご用意しました。赤か黒を選び、100円単位でベットしてください。");
 });
 
 updateBalance();
